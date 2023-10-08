@@ -12,11 +12,11 @@ public class Server implements Runnable {
     private final ServerSocket serverSocket;
     private final ExecutorService pool;
 
-    public final ConcurrentHashMap<String, ConcurrentHashMap<String, Handler>> getHandlers() {
+    public final ConcurrentHashMap<String, ConcurrentHashMap<String, IHandler>> getHandlers() {
         return handlers;
     }
 
-    private ConcurrentHashMap<String, ConcurrentHashMap<String, Handler>> handlers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, ConcurrentHashMap<String, IHandler>> handlers = new ConcurrentHashMap<>();
 
     private Server(int port, int poolSize) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -38,14 +38,14 @@ public class Server implements Runnable {
     public void run() { // run the service
         try {
             while (true) {
-                pool.execute(new ConnectionHandler(serverSocket.accept(), this));
+                pool.execute(new Handler(serverSocket.accept(), this));
             }
         } catch (IOException ex) {
             pool.shutdown();
         }
     }
 
-    public void addHandler(String method, String path, Handler handler) {
+    public void addHandler(String method, String path, IHandler handler) {
         var methodMap = handlers.get(method);
 
         if (methodMap == null) {

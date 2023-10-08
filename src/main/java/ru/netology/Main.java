@@ -21,7 +21,7 @@ public class Main {
         final var server = Server.getInstance(PORT, POOL_SIZE);
 
         // добавление хендлеров (обработчиков)
-        server.addHandler("GET", "/messages", new Handler() {
+        server.addHandler("GET", "/messages", new IHandler() {
             public void handle(Request request, BufferedOutputStream responseStream) throws IOException {
                 String content = "Hello, World from GET!";
                 responseStream.write(("HTTP/1.1 200 OK\r\n" +
@@ -34,7 +34,7 @@ public class Main {
             }
         });
 
-        server.addHandler("POST", "/messages", new Handler() {
+        server.addHandler("POST", "/messages", new IHandler() {
             public void handle(Request request, BufferedOutputStream responseStream) throws IOException {
                 String content = "Hello, World from POST!";
                 responseStream.write(("HTTP/1.1 200 OK\r\n" +
@@ -47,7 +47,7 @@ public class Main {
             }
         });
 
-        server.addHandler("GET", "/classic.html", new Handler() {
+        server.addHandler("GET", "/classic.html", new IHandler() {
             public void handle(Request request, BufferedOutputStream responseStream) throws IOException {
                 final var filePath = Path.of(".", "public", "classic.html");
                 final var mimeType = Files.probeContentType(filePath);
@@ -68,7 +68,7 @@ public class Main {
 
         for (String validPath : VALID_PATHS) {
 
-            server.addHandler("GET", validPath, new Handler() {
+            server.addHandler("GET", validPath, new IHandler() {
                 public void handle(Request request, BufferedOutputStream responseStream) throws IOException {
                     final var filePath = Path.of(".", PAGES, validPath);
                     final var mimeType = Files.probeContentType(filePath);
