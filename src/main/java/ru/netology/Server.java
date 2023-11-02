@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class Server implements Runnable {
 
-    private static volatile Server server = null;
+    private static Server server = null;
     private final ServerSocket serverSocket;
     private final ExecutorService pool;
 
